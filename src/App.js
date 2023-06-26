@@ -1,4 +1,6 @@
 import './App.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faPause, faRepeat, faVolumeMute } from '@fortawesome/free-solid-svg-icons';
 
 function Timer() {
 	return (
@@ -13,16 +15,16 @@ function ControlButtons() {
 	return (
 		<>
 			<div id="control-1">
-				{/* insert play button */}
+				<FontAwesomeIcon icon={faPlay} />
 			</div>
 			<div id="control-2">
-				{/* insert pause button */}
+				<FontAwesomeIcon icon={faPause}  />
 			</div>
 			<div id="control-3">
-				{/* insert repeat button */}
+				<FontAwesomeIcon icon={faRepeat} />
 			</div>
 			<div id="control-4">
-				{/* insert mute button */}
+				<FontAwesomeIcon icon={faVolumeMute} />
 			</div>
 		</>
 	);
@@ -39,7 +41,7 @@ export default function App() {
 				<div className="flex flex-row mx-auto">
 					<Timer />
 				</div>
-				<div className="flex flex-row mx-auto">
+				<div className="flex flex-row gap-3 mx-auto text-[12px]">
 					<ControlButtons />
 				</div>
 			</div>
