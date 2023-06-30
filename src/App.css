@@ -1,0 +1,41 @@
+.control-panel-buttons {
+  color: #ff581b;
+  text-align: center;
+  padding: 2px 0;
+  width: 28px;
+  background-color: #ffffff;
+  border-radius: 100%;
+  box-shadow: 2.1px 2.8px 0 0.5px #c2c2c2;
+  transition-property: all;
+  transition: 150ms;
+}
+
+.control-panel-buttons:active {
+  transition-property: all;
+  transition: 150ms;
+  transform: translateX(2.1px) translateY(2.8px);
+  box-shadow: 0px 0px 0 0px #ffffff;
+}
+
+#timer-display {
+  box-shadow: 0px 0px 6px 3px rgba(87, 87, 87, 0.76) inset;
+}
+
+.control-length-buttons {
+  color: #ff581b;
+  text-align: center;
+  padding: 2px 0;
+  width: 28px;
+  background-color: #ffffff;
+  border-radius: 100%;
+  box-shadow: 2.1px 2.8px 0 0.5px #c2c2c2;
+  transition-property: all;
+  transition: 150ms;
+}
+
+.control-length-buttons:active {
+  transition-property: all;
+  transition: 150ms;
+  transform: translateX(2.1px) translateY(2.8px);
+  box-shadow: 0px 0px 0 0px #ffffff;
+}
