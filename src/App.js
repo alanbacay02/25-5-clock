@@ -32,10 +32,10 @@ function ControlPanelButtons({ clockIsRunning, startTimer, pauseTimer, resetTime
 			{/* <div id="control-2" onClick={() => {}} className="control-panel-buttons">
 				<FontAwesomeIcon icon={faPause}  />
 			</div> */}
-			<div id="control-3" onClick={resetTimer} className="control-panel-buttons">
+			<div id="reset" onClick={resetTimer} className="control-panel-buttons">
 				<FontAwesomeIcon className="text-[12px]" icon={faRepeat} />
 			</div>
-			<div id="control-4" onClick={() => {}} className="control-panel-buttons">
+			<div id="mute" onClick={() => {}} className="control-panel-buttons">
 				<FontAwesomeIcon className="text-[12px]" icon={faVolumeMute} />
 			</div>
 		</div>
@@ -54,6 +54,7 @@ function SessionLengthControl({ sessionLength, handleSessionChange, handleBlur, 
 			<div id="session-increment" onClick={() => {handleSessionClick('increment');}} className="control-length-buttons select-none">+</div>
 			<div className="flex items-center justify-center w-16 h-10 my-auto text-center bg-slate-300 rounded-md shadow-inner">
 				<input
+					id="session-length"
 					type="text" 
 					inputMode="numeric" 
 					minLength="1" 
@@ -80,6 +81,7 @@ function BreakLengthControl({ breakLength, handleBreakChange, handleBlur, handle
 			<div id="break-increment" onClick={() => {handleBreakClick('increment');}} className="control-length-buttons select-none">+</div>
 			<div className="flex items-center justify-center w-16 h-10 my-auto text-center bg-slate-300 rounded-md shadow-inner">
 				<input
+					id="break-length"
 					type="text" 
 					inputMode="numeric" 
 					minLength="1" 
@@ -116,13 +118,17 @@ export default function App() {
 	// Creates state `breakLength` to store length of break time.
 	const [breakLength, setBreakLength] = useState(5);
 
+
+
 	useEffect(() => {
 		// Stop the countdown when `timeRemaining` reaches -1.
 		// We use -1 so we can display 0 to the clock before resetting to new mode.
-		if (timeRemaining === -1) {
+		if (timeRemaining === 0) {
 			setClockIsRunning(false);
 			clearInterval(timerId);
 			// Perform any necessary actions when the countdown ends.
+			let audio = new Audio('./soundfx/alarm_sfx.mp3');
+			audio.play();
 			if (clockMode === 'session') {
 				setClockMode('break');
 				setTimeRemaining(breakLength);
@@ -317,11 +323,11 @@ export default function App() {
 					<ControlPanelButtons clockIsRunning={clockIsRunning} startTimer={startTimer} pauseTimer={pauseTimer} resetTimer={resetTimer} />
 				</div>
 				<div className="flex flex-col mx-auto">
-					<p className="text-center select-none">Session Length</p>
+					<p id="session-label" className="text-center select-none">Session Length</p>
 					<SessionLengthControl sessionLength={sessionLength} handleSessionChange={handleSessionChange} handleBlur={handleBlur} handleSessionClick={handleSessionClick} />
 				</div>
 				<div className="flex flex-col mx-auto">
-					<p className="text-center select-none">Break Length</p>
+					<p id="break-label" className="text-center select-none">Break Length</p>
 					<BreakLengthControl breakLength={breakLength} handleBreakChange={handleBreakChange} handleBlur={handleBlur} handleBreakClick={handleBreakClick} />
 				</div>
 			</div>
