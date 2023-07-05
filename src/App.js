@@ -124,21 +124,26 @@ export default function App() {
 		// Stop the countdown when `timeRemaining` reaches -1.
 		// We use -1 so we can display 0 to the clock before resetting to new mode.
 		if (timeRemaining === 0) {
-			setClockIsRunning(false);
 			clearInterval(timerId);
 			// Perform any necessary actions when the countdown ends.
-			let audio = new Audio('./soundfx/alarm_sfx.mp3');
+			// Create an audio element
+			let audio = new Audio('/soundfx/alarm_sfx.mp3');
+
+			// Set the source and attributes
+			audio.src = '/soundfx/alarm_sfx.mp3';
+			audio.id = 'beep';
 			audio.play();
+			
 			if (clockMode === 'session') {
 				setClockMode('break');
-				setTimeRemaining(breakLength);
-				setClockIsPaused(true);
+				let convertedBreakLength = convertToSeconds(breakLength);
+				setTimeRemaining(convertedBreakLength);
 				startTimer();
 			}
 			if (clockMode === 'break') {
 				setClockMode('session');
-				setTimeRemaining(sessionLength);
-				setClockIsPaused(true);
+				let convertedSessionLength = convertToSeconds(sessionLength);
+				setTimeRemaining(convertedSessionLength);
 				startTimer();
 			}
 		}
@@ -147,7 +152,7 @@ export default function App() {
 	function startTimer() {
 		// Checks if timer is not paused. When true, the clock does not need to continue
 		// from its previous state and can be assigned a new state to start from.
-		if (!clockIsPaused) {
+		if (!clockIsPaused && !clockIsRunning) {
 			let convertedSessionLength = convertToSeconds(sessionLength);
 			setTimeRemaining(convertedSessionLength);
 		}
@@ -182,8 +187,10 @@ export default function App() {
 		setClockIsRunning(false); // Sets states to false to prepare for new countdown.
 		setClockIsPaused(false); // Sets states to false to prepare for new countdown.
 		setClockMode('session'); // Sets clock back to session mode.
-		let convertedSessionLength = convertToSeconds(sessionLength);
-		setTimeRemaining(convertedSessionLength); // Resets `timeRemaining` to initial `sessionLength`.
+		setSessionLength(25);
+		setBreakLength(5);
+		let convertedLength = convertToSeconds(25);
+		setTimeRemaining(convertedLength); // Resets `timeRemaining` to initial `sessionLength`.
 	}
 
 	// -------------- handles changes and click for `SessionLengthControl` Component --------------------------
