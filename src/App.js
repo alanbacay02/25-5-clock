@@ -2,7 +2,7 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faPause, faRepeat, faVolumeMute } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faPause, faRepeat, faVolumeMute, faVolumeHigh } from '@fortawesome/free-solid-svg-icons';
 
 function Timer({ timeRemaining, clockMode }) {
 	function formatTime(seconds) {
@@ -23,20 +23,17 @@ Timer.propTypes = {
 	clockMode: PropTypes.string.isRequired
 };
 
-function ControlPanelButtons({ clockIsRunning, startTimer, pauseTimer, resetTimer }) {
+function ControlPanelButtons({ clockIsRunning, startTimer, pauseTimer, resetTimer, muteAlarm, alarmIsMuted }) {
 	return (
 		<div className="flex flex-row gap-3 mx-auto pt-[6px] pb-[8px] px-[10px] bg-gray-100 rounded-md shadow-inner">
 			<div id="start_stop" onClick={clockIsRunning ? pauseTimer : startTimer} className="control-panel-buttons">
 				<FontAwesomeIcon className="text-[10.5px] pr-[1px]" icon={faPlay} /><FontAwesomeIcon className="text-[12px]" icon={faPause}  />
 			</div>
-			{/* <div id="control-2" onClick={() => {}} className="control-panel-buttons">
-				<FontAwesomeIcon icon={faPause}  />
-			</div> */}
 			<div id="reset" onClick={resetTimer} className="control-panel-buttons">
 				<FontAwesomeIcon className="text-[12px]" icon={faRepeat} />
 			</div>
-			<div id="mute" onClick={() => {}} className="control-panel-buttons">
-				<FontAwesomeIcon className="text-[12px]" icon={faVolumeMute} />
+			<div id="mute" onClick={muteAlarm} className="control-panel-buttons">
+				<FontAwesomeIcon className="text-[12px]" icon={alarmIsMuted ? faVolumeHigh : faVolumeMute} />
 			</div>
 		</div>
 	);
@@ -45,7 +42,9 @@ ControlPanelButtons.propTypes = {
 	clockIsRunning: PropTypes.bool.isRequired,
 	resetTimer: PropTypes.func.isRequired,
 	startTimer: PropTypes.func.isRequired,
-	pauseTimer: PropTypes.func.isRequired
+	pauseTimer: PropTypes.func.isRequired,
+	muteAlarm: PropTypes.func.isRequired,
+	alarmIsMuted: PropTypes.bool.isRequired
 };
 
 function SessionLengthControl({ sessionLength, handleSessionChange, handleBlur, handleSessionClick }) {
@@ -113,27 +112,26 @@ export default function App() {
 	const [clockIsRunning, setClockIsRunning] = useState(false);
 	// Creates state `clockIsPaused` to store state of clock when paused.
 	const [clockIsPaused, setClockIsPaused] = useState(false);
+	// Creats state `alarmIsMuted` to store state when alarm is muted.
+	const [alarmIsMuted, setAlarmIsMuted] = useState(false);
 	// Creates state `sessionLength` to store length of session time.
 	const [sessionLength, setSessionLength] = useState(25);
 	// Creates state `breakLength` to store length of break time.
 	const [breakLength, setBreakLength] = useState(5);
-
-
+	// Create an audio element `audioAlarm`.
+	const audioAlarm = new Audio('/soundfx/alarm_sfx.mp3');
+	// Set the source and attributes of `audioAlarm`.
+	audioAlarm.src = '/soundfx/alarm_sfx.mp3';
+	audioAlarm.id = 'beep';
 
 	useEffect(() => {
 		// Stop the countdown when `timeRemaining` reaches -1.
-		// We use -1 so we can display 0 to the clock before resetting to new mode.
 		if (timeRemaining === 0) {
 			clearInterval(timerId);
 			// Perform any necessary actions when the countdown ends.
-			// Create an audio element
-			let audio = new Audio('/soundfx/alarm_sfx.mp3');
-
-			// Set the source and attributes
-			audio.src = '/soundfx/alarm_sfx.mp3';
-			audio.id = 'beep';
-			audio.play();
-			
+			if (!alarmIsMuted) {
+				audioAlarm.play();
+			}
 			if (clockMode === 'session') {
 				setClockMode('break');
 				let convertedBreakLength = convertToSeconds(breakLength);
@@ -191,6 +189,10 @@ export default function App() {
 		setBreakLength(5);
 		let convertedLength = convertToSeconds(25);
 		setTimeRemaining(convertedLength); // Resets `timeRemaining` to initial `sessionLength`.
+	}
+
+	function muteAlarm() {
+		setAlarmIsMuted(!alarmIsMuted);
 	}
 
 	// -------------- handles changes and click for `SessionLengthControl` Component --------------------------
@@ -314,9 +316,6 @@ export default function App() {
 		}
 	}
 
-
-
-
 	return (
 		<div className="App flex h-screen bg-[#3c3c3c]">
 			<div id="App-frame" className="flex flex-col gap-2 w-[240px] h-[420px] mx-auto my-auto border-2 border-[#fdf9f3] bg-[#fdf9f3] rounded-lg">
@@ -327,7 +326,7 @@ export default function App() {
 					<Timer timeRemaining={timeRemaining} clockMode={clockMode} />
 				</div>
 				<div className="flex flex-row mx-auto">
-					<ControlPanelButtons clockIsRunning={clockIsRunning} startTimer={startTimer} pauseTimer={pauseTimer} resetTimer={resetTimer} />
+					<ControlPanelButtons clockIsRunning={clockIsRunning} startTimer={startTimer} pauseTimer={pauseTimer} resetTimer={resetTimer} muteAlarm={muteAlarm} alarmIsMuted={alarmIsMuted} />
 				</div>
 				<div className="flex flex-col mx-auto">
 					<p id="session-label" className="text-center select-none">Session Length</p>
