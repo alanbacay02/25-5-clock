@@ -1,0 +1,59 @@
+[33mcommit 0cc72f2736178e600fd643f4c7b53a0e90b382b0[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: alanbacay02 <alan.social02@gmail.com>
+Date:   Thu Jul 6 16:55:02 2023 +0800
+
+    implements mute button for alarm sound
+
+[33mcommit 91ac88e34287891188801b485db9f463f8eaab61[m
+Author: alanbacay02 <alan.social02@gmail.com>
+Date:   Wed Jul 5 18:43:13 2023 +0800
+
+    fixes a bug when session ends, reakLength defaults to 1 min
+
+[33mcommit 499b9c87bb968502f65d28161471848e91d86a66[m
+Author: alanbacay02 <alan.social02@gmail.com>
+Date:   Wed Jul 5 18:06:59 2023 +0800
+
+    adds and plays alarm sound when timer reaches zero
+
+[33mcommit 635fb582eb47249472df49a17eeec26366aa7729[m
+Author: alanbacay02 <alan.social02@gmail.com>
+Date:   Tue Jul 4 18:17:03 2023 +0800
+
+    converts time display to appropriate min and secs
+
+[33mcommit 58f3405d0d1cae667451634deb3ccfc6e38841c5[m
+Author: alanbacay02 <alan.social02@gmail.com>
+Date:   Fri Jun 30 17:32:05 2023 +0800
+
+    implements simple clock controls and clock timer
+
+[33mcommit f6c7cb70c1f7ccc9c12dd2301aea8e9b2b11a229[m
+Author: alanbacay02 <alan.social02@gmail.com>
+Date:   Mon Jun 26 21:46:52 2023 +0800
+
+    adds and imports faIcons
+
+[33mcommit fc5a637aa41dfbc144101da3c3718bb7ebbc85a2[m
+Author: alanbacay02 <alan.social02@gmail.com>
+Date:   Mon Jun 26 18:50:54 2023 +0800
+
+    adds basic jsx for timer display
+
+[33mcommit 1cfa0bdc0d9897025cae1f035340ae50a4d12fb4[m
+Author: alanbacay02 <alan.social02@gmail.com>
+Date:   Mon Jun 26 17:30:15 2023 +0800
+
+    adds tailwindcss
+
+[33mcommit f84be4172301717ba9b30f66665b0be2f57ec6b9[m
+Author: alanbacay02 <alan.social02@gmail.com>
+Date:   Mon Jun 26 17:13:19 2023 +0800
+
+    first commit, adds eslint
+
+[33mcommit 04f96caee919235986b2c154306203f08d9d947b[m
+Author: alanbacay02 <alan.social02@gmail.com>
+Date:   Mon Jun 26 17:04:19 2023 +0800
+
+    Initialize project using Create React App

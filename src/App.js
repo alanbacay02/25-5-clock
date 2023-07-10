@@ -1,20 +1,22 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faPause, faRepeat, faVolumeMute, faVolumeHigh } from '@fortawesome/free-solid-svg-icons';
+import 'remixicon/fonts/remixicon.css';
+
 
 function Timer({ timeRemaining, clockMode }) {
 	function formatTime(seconds) {
 		const minutes = Math.floor(seconds / 60);
 		const secondsFormatted = String(seconds % 60).padStart(2, '0');
-		return `${minutes}:${secondsFormatted}`;
+		return `${minutes} : ${secondsFormatted}`;
 	}
 
 	return (
-		<div id="timer-display" className="flex flex-col items-center justify-center w-[140px] h-[90px] bg-[#ff7e2e] rounded-xl select-none">
-			<p id="timer-label" className="h-[14px] text-center text-sm text-[#414141]">{clockMode === 'session' ? 'Session' : 'Break'}</p>
-			<p id="time-left" className="h-[36px] text-center text-3xl text-[#414141]">{formatTime(timeRemaining)}</p>
+		<div id="timer-display" className="flex flex-col justify-center">
+			<p id="time-left" className="text-center h-[54px] text-[54px]">
+				{formatTime(timeRemaining)}
+			</p>
+			<p id="timer-label" className="mt-[14px] text-center text-base">{clockMode === 'session' ? 'Session' : 'Break'}</p>
 		</div>
 	);
 }
@@ -25,15 +27,18 @@ Timer.propTypes = {
 
 function ControlPanelButtons({ clockIsRunning, startTimer, pauseTimer, resetTimer, muteAlarm, alarmIsMuted }) {
 	return (
-		<div className="flex flex-row gap-3 mx-auto pt-[6px] pb-[8px] px-[10px] bg-gray-100 rounded-md shadow-inner">
-			<div id="start_stop" onClick={clockIsRunning ? pauseTimer : startTimer} className="control-panel-buttons">
-				<FontAwesomeIcon className="text-[10.5px] pr-[1px]" icon={faPlay} /><FontAwesomeIcon className="text-[12px]" icon={faPause}  />
+		<div className="flex flex-row gap-8 mx-auto justify-center items-center">
+			<div id="mute" onClick={muteAlarm} className="flex items-center text-2xl">
+				<i className={alarmIsMuted ?'ri-volume-up-line' : 'ri-volume-mute-line'}></i>
+				{/* <FontAwesomeIcon className="text-xl" icon={alarmIsMuted ? faVolumeHigh : faVolumeMute} /> */}
 			</div>
-			<div id="reset" onClick={resetTimer} className="control-panel-buttons">
-				<FontAwesomeIcon className="text-[12px]" icon={faRepeat} />
+			<div id="start_stop" onClick={clockIsRunning ? pauseTimer : startTimer} className="flex items-center text-4xl">
+				<i className={clockIsRunning ? 'ri-pause-fill' : 'ri-play-fill'}></i>
+				{/* <FontAwesomeIcon className="text-3xl" icon={clockIsRunning ? faPause : faPlay} /> */}
 			</div>
-			<div id="mute" onClick={muteAlarm} className="control-panel-buttons">
-				<FontAwesomeIcon className="text-[12px]" icon={alarmIsMuted ? faVolumeHigh : faVolumeMute} />
+			<div id="reset" onClick={resetTimer} className="flex items-center text-[21px]">
+				<i className="ri-restart-line"></i>
+				{/* <FontAwesomeIcon className="text-xl" icon={faRotateRight} /> */}
 			</div>
 		</div>
 	);
@@ -49,9 +54,9 @@ ControlPanelButtons.propTypes = {
 
 function SessionLengthControl({ sessionLength, handleSessionChange, handleBlur, handleSessionClick }) {
 	return (
-		<div className="flex flex-row justify-center items-center gap-2 pt-1 px-[6px] pb-[6px] bg-gray-100 rounded-md shadow-inner">
-			<div id="session-increment" onClick={() => {handleSessionClick('increment');}} className="control-length-buttons select-none">+</div>
-			<div className="flex items-center justify-center w-16 h-10 my-auto text-center bg-slate-300 rounded-md shadow-inner">
+		<div className="flex flex-row justify-center items-center gap-[2px]">
+			<div id="session-increment" onClick={() => {handleSessionClick('increment');}} className="flex justify-center text-base select-none"><i className="ri-add-line text-2xl"></i></div>
+			<div className="flex items-center justify-center w-16 my-auto text-center">
 				<input
 					id="session-length"
 					type="text" 
@@ -61,9 +66,9 @@ function SessionLengthControl({ sessionLength, handleSessionChange, handleBlur, 
 					value={sessionLength}
 					onChange={handleSessionChange}
 					onBlur={() => {handleBlur('session');}}
-					className="max-w-[64px] text-center bg-inherit bg-opacity-0 focus:outline-none"/>
+					className="max-w-[40px] text-center text-3xl bg-inherit bg-opacity-0 focus:outline-none"/>
 			</div>
-			<div id="session-decrement" onClick={() => {handleSessionClick('decrement');}} className="control-length-buttons select-none">-</div>
+			<div id="session-decrement" onClick={() => {handleSessionClick('decrement');}} className="flex justify-center text-base select-none"><i className="ri-subtract-line text-2xl"></i></div>
 		</div>
 	);
 }
@@ -76,9 +81,9 @@ SessionLengthControl.propTypes = {
 
 function BreakLengthControl({ breakLength, handleBreakChange, handleBlur, handleBreakClick }) {
 	return (
-		<div className="flex flex-row justify-center items-center gap-2 pt-1 px-[6px] pb-[6px] bg-gray-100 rounded-md shadow-inner">
-			<div id="break-increment" onClick={() => {handleBreakClick('increment');}} className="control-length-buttons select-none">+</div>
-			<div className="flex items-center justify-center w-16 h-10 my-auto text-center bg-slate-300 rounded-md shadow-inner">
+		<div className="flex flex-row justify-center items-center gap-[2px]">
+			<div id="break-increment" onClick={() => {handleBreakClick('increment');}} className="flex justify-center text-base select-none"><i className="ri-add-line text-2xl"></i></div>
+			<div className="flex items-center justify-center w-16 my-auto text-center">
 				<input
 					id="break-length"
 					type="text" 
@@ -88,9 +93,9 @@ function BreakLengthControl({ breakLength, handleBreakChange, handleBlur, handle
 					value={breakLength}
 					onChange={handleBreakChange}
 					onBlur={() => {handleBlur('break');}}
-					className="max-w-[64px] text-center bg-inherit bg-opacity-0 focus:outline-none"/>
+					className="max-w-[40px] text-center text-3xl bg-inherit bg-opacity-0 focus:outline-none"/>
 			</div>
-			<div id="break-decrement" onClick={() => {handleBreakClick('decrement');}} className="control-length-buttons select-none">-</div>
+			<div id="break-decrement" onClick={() => {handleBreakClick('decrement');}} className="flex justify-center text-base select-none"><i className="ri-subtract-line text-2xl"></i></div>
 		</div>
 	);
 }
@@ -250,7 +255,7 @@ export default function App() {
 		if (!/^\d*$/.test(value)) {
 			return;
 		}
-		setBreakLength(value === '' ? 1 : parseInt(value));
+		setBreakLength(value === '' ? '' : parseInt(value));
 		if (clockMode === 'break') {
 			let convertedBreakLength = convertToSeconds(value === '' ? 1 : parseInt(value));
 			setTimeRemaining(convertedBreakLength);
@@ -317,24 +322,28 @@ export default function App() {
 	}
 
 	return (
-		<div className="App flex h-screen bg-[#3c3c3c]">
-			<div id="App-frame" className="flex flex-col gap-2 w-[240px] h-[420px] mx-auto my-auto border-2 border-[#fdf9f3] bg-[#fdf9f3] rounded-lg">
-				<div className="flex flex-row mx-auto pt-3">
-					<p className="text-xl text-[#f14b0e] select-none">25 + 5 Clock</p>
+		<div className="App flex h-screen">
+			<div id="App-frame" className="flex flex-col gap-[6px] w-fit mx-auto">
+				<div className="flex flex-row mx-auto pt-[18px]">
+					<p className="text-base select-none">Pomodoro Timer</p>
 				</div>
-				<div className="flex flex-row mx-auto">
+				<hr id="header-hr" />
+				<div className="flex flex-row mx-auto mt-7">
 					<Timer timeRemaining={timeRemaining} clockMode={clockMode} />
 				</div>
-				<div className="flex flex-row mx-auto">
+				<div id="length-controls-component" className="flex flex-col mx-auto mt-8 gap-4">
+					<div className="flex flex-col mx-auto gap-1">
+						<SessionLengthControl sessionLength={sessionLength} handleSessionChange={handleSessionChange} handleBlur={handleBlur} handleSessionClick={handleSessionClick} />
+						<p id="session-label" className="text-center select-none">Session Length</p>
+					</div>
+					<hr id="length-controls-hr" className="control-hr" />
+					<div className="flex flex-col mx-auto gap-1">
+						<BreakLengthControl breakLength={breakLength} handleBreakChange={handleBreakChange} handleBlur={handleBlur} handleBreakClick={handleBreakClick} />
+						<p id="break-label" className="text-center select-none">Break Length</p>
+					</div>
+				</div>
+				<div className="flex flex-row mx-auto mt-[54px]">
 					<ControlPanelButtons clockIsRunning={clockIsRunning} startTimer={startTimer} pauseTimer={pauseTimer} resetTimer={resetTimer} muteAlarm={muteAlarm} alarmIsMuted={alarmIsMuted} />
-				</div>
-				<div className="flex flex-col mx-auto">
-					<p id="session-label" className="text-center select-none">Session Length</p>
-					<SessionLengthControl sessionLength={sessionLength} handleSessionChange={handleSessionChange} handleBlur={handleBlur} handleSessionClick={handleSessionClick} />
-				</div>
-				<div className="flex flex-col mx-auto">
-					<p id="break-label" className="text-center select-none">Break Length</p>
-					<BreakLengthControl breakLength={breakLength} handleBreakChange={handleBreakChange} handleBlur={handleBlur} handleBreakClick={handleBreakClick} />
 				</div>
 			</div>
 		</div>
