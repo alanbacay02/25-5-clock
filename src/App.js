@@ -2,6 +2,8 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import 'remixicon/fonts/remixicon.css';
+import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 
 
 function Timer({ timeRemaining, clockMode }) {
@@ -25,16 +27,25 @@ Timer.propTypes = {
 	clockMode: PropTypes.string.isRequired
 };
 
-function ControlPanelButtons({ clockIsRunning, startTimer, pauseTimer, resetTimer, muteAlarm, alarmIsMuted }) {
+function ControlPanelButtons({ clockIsRunning, startTimer, pauseTimer, resetTimer, muteAlarm, alarmIsMuted, timeRemaining, clockMode, sessionLength, breakLength }) {
+	const totalTime =  convertToSeconds(clockMode === 'session' ? sessionLength : breakLength);
+	const progress = ((totalTime - timeRemaining) / totalTime) * 100;
 	return (
-		<div className="flex flex-row gap-8 mx-auto justify-center items-center">
+		<div className="flex flex-row gap-6 mx-auto justify-center items-center">
 			<div id="mute" onClick={muteAlarm} className="flex items-center text-2xl">
 				<i className={alarmIsMuted ?'ri-volume-up-line' : 'ri-volume-mute-line'}></i>
 				{/* <FontAwesomeIcon className="text-xl" icon={alarmIsMuted ? faVolumeHigh : faVolumeMute} /> */}
 			</div>
-			<div id="start_stop" onClick={clockIsRunning ? pauseTimer : startTimer} className="flex items-center text-4xl">
-				<i className={clockIsRunning ? 'ri-pause-fill' : 'ri-play-fill'}></i>
-				{/* <FontAwesomeIcon className="text-3xl" icon={clockIsRunning ? faPause : faPlay} /> */}
+			<div id="start_stop" className="h-20 w-20 flex">
+				<CircularProgressbarWithChildren
+					id="play-progress-circle"
+					value={progress}
+					text=""
+					strokeWidth="3"
+				>
+					<i className={`${clockIsRunning ? 'ri-pause-fill' : 'ri-play-fill'} text-[44px]`} onClick={clockIsRunning ? pauseTimer : startTimer}  />
+				</CircularProgressbarWithChildren>
+
 			</div>
 			<div id="reset" onClick={resetTimer} className="flex items-center text-[21px]">
 				<i className="ri-restart-line"></i>
@@ -49,7 +60,11 @@ ControlPanelButtons.propTypes = {
 	startTimer: PropTypes.func.isRequired,
 	pauseTimer: PropTypes.func.isRequired,
 	muteAlarm: PropTypes.func.isRequired,
-	alarmIsMuted: PropTypes.bool.isRequired
+	alarmIsMuted: PropTypes.bool.isRequired,
+	timeRemaining: PropTypes.number.isRequired,
+	clockMode: PropTypes.string.isRequired,
+	sessionLength: PropTypes.number.isRequired,
+	breakLength: PropTypes.number.isRequired
 };
 
 function SessionLengthControl({ sessionLength, handleSessionChange, handleBlur, handleSessionClick }) {
@@ -342,8 +357,8 @@ export default function App() {
 						<p id="break-label" className="text-center select-none">Break Length</p>
 					</div>
 				</div>
-				<div className="flex flex-row mx-auto mt-[54px]">
-					<ControlPanelButtons clockIsRunning={clockIsRunning} startTimer={startTimer} pauseTimer={pauseTimer} resetTimer={resetTimer} muteAlarm={muteAlarm} alarmIsMuted={alarmIsMuted} />
+				<div className="flex flex-row mx-auto mt-[40px]">
+					<ControlPanelButtons clockIsRunning={clockIsRunning} startTimer={startTimer} pauseTimer={pauseTimer} resetTimer={resetTimer} muteAlarm={muteAlarm} alarmIsMuted={alarmIsMuted} timeRemaining={timeRemaining} clockMode={clockMode} sessionLength={sessionLength} breakLength={breakLength} />
 				</div>
 			</div>
 		</div>
