@@ -61,7 +61,6 @@
   filter: drop-shadow(0px 0px 0px rgba(0, 0, 0, 0.842));
 }
 
-
 .day-mode .CircularProgressbar-path {
   stroke: var(--day-text) !important;
 }
@@ -76,3 +75,33 @@
 /* .CircularProgressbar-text {
   fill: yellow;
 } */
+
+@media (min-width: 1024px) {
+  #header-hr.day-mode {
+    width: 80px;
+  }
+  
+  #header-hr.night-mode {
+    width: 80px;
+  }
+
+  #length-controls-hr.day-mode {
+    margin: auto 0;
+    height: 0px;
+    width: 100px;
+    stroke-width: 1px;
+    border-color: #d4d4d4;
+    stroke: rgba(48, 43, 39, 0.21);
+    filter: drop-shadow(0px 0px 0px rgba(0, 0, 0, 0.403));
+  }
+  
+  #length-controls-hr.night-mode {
+    margin: auto 0;
+    height: 0px;
+    width: 100px;
+    stroke-width: 1px;
+    border-color: #121212;
+    stroke: rgb(0, 0, 0);
+    filter: drop-shadow(0px 0px 0px rgba(0, 0, 0, 0.842));
+  }
+}

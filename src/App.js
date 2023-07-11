@@ -14,11 +14,11 @@ function Timer({ timeRemaining, clockMode }) {
 	}
 
 	return (
-		<div id="timer-display" className="flex flex-col justify-center w-[230px] h-[160px] rounded-[8px]">
-			<p id="time-left" className="text-center h-[54px] text-[54px]">
+		<div id="timer-display" className="flex flex-col justify-center w-[230px] h-[160px] md:w-[350px] md:h-[200px] lg:w-[500px] lg:h-[300px] rounded-[8px]">
+			<p id="time-left" className="text-center h-[54px] text-[54px] md:text-[70px] md:h-[70px] lg:text-[110px] lg:h-[110px]">
 				{formatTime(timeRemaining)}
 			</p>
-			<p id="timer-label" className="mt-[14px] text-center text-base">{clockMode === 'session' ? 'Session' : 'Break'}</p>
+			<p id="timer-label" className="mt-[14px] text-center text-base md:text-lg lg:text-3xl lg:mt-7">{clockMode === 'session' ? 'Session' : 'Break'}</p>
 		</div>
 	);
 }
@@ -32,22 +32,20 @@ function ControlPanelButtons({ clockIsRunning, startTimer, pauseTimer, resetTime
 	const progress = ((totalTime - timeRemaining) / totalTime) * 100;
 	return (
 		<div className="flex flex-row gap-6 mx-auto justify-center items-center">
-			<div id="mute" onClick={muteAlarm} className="flex items-center text-2xl">
+			<div id="mute" onClick={muteAlarm} className="flex items-center text-2xl lg:text-4xl">
 				<i className={alarmIsMuted ?'ri-volume-up-line' : 'ri-volume-mute-line'}></i>
-				{/* <FontAwesomeIcon className="text-xl" icon={alarmIsMuted ? faVolumeHigh : faVolumeMute} /> */}
 			</div>
-			<div id="start_stop" className="h-20 w-20 flex">
+			<div id="start_stop" className="h-20 w-20 lg:h-[120px] lg:w-[120px] flex">
 				<CircularProgressbarWithChildren
 					id="play-progress-circle"
 					value={progress}
 					strokeWidth="3"
 				>
-					<i className={`${clockIsRunning ? 'ri-pause-fill' : 'ri-play-fill'} text-[44px]`} onClick={clockIsRunning ? pauseTimer : startTimer}  />
+					<i className={`${clockIsRunning ? 'ri-pause-fill' : 'ri-play-fill'} text-[44px] lg:text-[70px]`} onClick={clockIsRunning ? pauseTimer : startTimer}  />
 				</CircularProgressbarWithChildren>
 			</div>
-			<div id="reset" onClick={resetTimer} className="flex items-center text-[21px]">
+			<div id="reset" onClick={resetTimer} className="flex items-center text-[21px] lg:text-[34px]">
 				<i className="ri-restart-line"></i>
-				{/* <FontAwesomeIcon className="text-xl" icon={faRotateRight} /> */}
 			</div>
 		</div>
 	);
@@ -68,7 +66,7 @@ ControlPanelButtons.propTypes = {
 function SessionLengthControl({ sessionLength, handleSessionChange, handleBlur, handleSessionClick }) {
 	return (
 		<div className="flex flex-row justify-center items-center gap-[2px]">
-			<div id="session-increment" onClick={() => {handleSessionClick('increment');}} className="flex justify-center text-base select-none"><i className="ri-add-line text-2xl"></i></div>
+			<div id="session-increment" onClick={() => {handleSessionClick('increment');}} className="flex justify-center text-base select-none"><i className="ri-add-line text-2xl md:text-[28px] lg:text-4xl"></i></div>
 			<div className="flex items-center justify-center w-16 my-auto text-center">
 				<input
 					id="session-length"
@@ -79,9 +77,9 @@ function SessionLengthControl({ sessionLength, handleSessionChange, handleBlur, 
 					value={sessionLength}
 					onChange={handleSessionChange}
 					onBlur={() => {handleBlur('session');}}
-					className="max-w-[40px] text-center text-3xl bg-inherit bg-opacity-0 focus:outline-none"/>
+					className="max-w-[40px] md:max-w-[46px] lg:max-w-[60px] text-center text-3xl md:text-4xl lg:text-5xl bg-inherit bg-opacity-0 focus:outline-none"/>
 			</div>
-			<div id="session-decrement" onClick={() => {handleSessionClick('decrement');}} className="flex justify-center text-base select-none"><i className="ri-subtract-line text-2xl"></i></div>
+			<div id="session-decrement" onClick={() => {handleSessionClick('decrement');}} className="flex justify-center text-base select-none"><i className="ri-subtract-line text-2xl md:text-[28px] lg:text-4xl"></i></div>
 		</div>
 	);
 }
@@ -95,7 +93,7 @@ SessionLengthControl.propTypes = {
 function BreakLengthControl({ breakLength, handleBreakChange, handleBlur, handleBreakClick }) {
 	return (
 		<div className="flex flex-row justify-center items-center gap-[2px]">
-			<div id="break-increment" onClick={() => {handleBreakClick('increment');}} className="flex justify-center text-base select-none"><i className="ri-add-line text-2xl"></i></div>
+			<div id="break-increment" onClick={() => {handleBreakClick('increment');}} className="flex justify-center text-base select-none"><i className="ri-add-line text-2xl md:text-[28px] lg:text-4xl"></i></div>
 			<div className="flex items-center justify-center w-16 my-auto text-center">
 				<input
 					id="break-length"
@@ -106,9 +104,9 @@ function BreakLengthControl({ breakLength, handleBreakChange, handleBlur, handle
 					value={breakLength}
 					onChange={handleBreakChange}
 					onBlur={() => {handleBlur('break');}}
-					className="max-w-[40px] text-center text-3xl bg-inherit bg-opacity-0 focus:outline-none"/>
+					className="max-w-[40px] md:max-w-[46px] lg:max-w-[60px] text-center text-3xl md:text-4xl lg:text-5xl bg-inherit bg-opacity-0 focus:outline-none"/>
 			</div>
-			<div id="break-decrement" onClick={() => {handleBreakClick('decrement');}} className="flex justify-center text-base select-none"><i className="ri-subtract-line text-2xl"></i></div>
+			<div id="break-decrement" onClick={() => {handleBreakClick('decrement');}} className="flex justify-center text-base select-none"><i className="ri-subtract-line text-2xl md:text-[28px] lg:text-4xl"></i></div>
 		</div>
 	);
 }
@@ -343,34 +341,34 @@ export default function App() {
 
 	return (
 		<div className={`${isNightMode ? 'night-mode' : 'day-mode'} App flex h-screen`}>
-			<div id="App-frame" className="flex flex-col gap-[6px] w-[230px] mx-auto">
-				<div id="header" className="flex items-center justify-center pt-[18px]">
+			<div id="App-frame" className="flex flex-col gap-[6px] w-fit mx-auto">
+				<div id="header" className="flex items-center justify-center mt-4 lg:mt-24 lg:mb-2">
 					<div className="flex-1 text-center">
-						<p className="text-base select-none">Pomodoro Timer</p>
+						<p className="text-base md:text-xl lg:text-3xl select-none">Pomodoro Timer</p>
 					</div>
 					<div>
 						<i 
-							className={`${isNightMode ? 'ri-sun-line' : 'ri-moon-line'} text-[18px]`}
+							className={`${isNightMode ? 'ri-sun-line' : 'ri-moon-line'} text-lg md:text-xl lg:text-3xl`}
 							onClick={changeDisplayMode}>
 						</i>
 					</div>
 				</div>
 				<hr id="header-hr" className={`${isNightMode ? 'night-mode' : 'day-mode'}`} />
-				<div className="flex flex-row mx-auto mt-7">
+				<div className="flex flex-row mx-auto mt-7 lg:mt-10">
 					<Timer timeRemaining={timeRemaining} clockMode={clockMode} />
 				</div>
-				<div id="length-controls-component" className="flex flex-col mx-auto mt-8 gap-4">
+				<div id="length-controls-component" className="flex flex-col lg:flex-row h-fit mx-auto mt-8 md:mt-6 lg:mt-8 gap-4 lg:gap-0">
 					<div className="flex flex-col mx-auto gap-1">
 						<SessionLengthControl sessionLength={sessionLength} handleSessionChange={handleSessionChange} handleBlur={handleBlur} handleSessionClick={handleSessionClick} />
-						<p id="session-label" className="text-center select-none">Session Length</p>
+						<p id="session-label" className="text-center md:text-lg lg:text-xl select-none">Session Length</p>
 					</div>
-					<hr id="length-controls-hr" className={`${isNightMode ? 'night-mode' : 'day-mode'}`} />
+					<hr id="length-controls-hr" className={`${isNightMode ? 'night-mode' : 'day-mode'} lg:rotate-90`} />
 					<div className="flex flex-col mx-auto gap-1">
 						<BreakLengthControl breakLength={breakLength} handleBreakChange={handleBreakChange} handleBlur={handleBlur} handleBreakClick={handleBreakClick} />
-						<p id="break-label" className="text-center select-none">Break Length</p>
+						<p id="break-label" className="text-center md:text-lg lg:text-xl select-none">Break Length</p>
 					</div>
 				</div>
-				<div className="flex flex-row mx-auto mt-[40px]">
+				<div className="flex flex-row mx-auto mt-[40px] lg:mt-24">
 					<ControlPanelButtons clockIsRunning={clockIsRunning} startTimer={startTimer} pauseTimer={pauseTimer} resetTimer={resetTimer} muteAlarm={muteAlarm} alarmIsMuted={alarmIsMuted} timeRemaining={timeRemaining} clockMode={clockMode} sessionLength={sessionLength} breakLength={breakLength} />
 				</div>
 			</div>
