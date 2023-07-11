@@ -14,7 +14,7 @@ function Timer({ timeRemaining, clockMode }) {
 	}
 
 	return (
-		<div id="timer-display" className="flex flex-col justify-center">
+		<div id="timer-display" className="flex flex-col justify-center w-[230px] h-[160px] rounded-[8px]">
 			<p id="time-left" className="text-center h-[54px] text-[54px]">
 				{formatTime(timeRemaining)}
 			</p>
@@ -40,12 +40,10 @@ function ControlPanelButtons({ clockIsRunning, startTimer, pauseTimer, resetTime
 				<CircularProgressbarWithChildren
 					id="play-progress-circle"
 					value={progress}
-					text=""
 					strokeWidth="3"
 				>
 					<i className={`${clockIsRunning ? 'ri-pause-fill' : 'ri-play-fill'} text-[44px]`} onClick={clockIsRunning ? pauseTimer : startTimer}  />
 				</CircularProgressbarWithChildren>
-
 			</div>
 			<div id="reset" onClick={resetTimer} className="flex items-center text-[21px]">
 				<i className="ri-restart-line"></i>
@@ -138,6 +136,8 @@ export default function App() {
 	const [sessionLength, setSessionLength] = useState(25);
 	// Creates state `breakLength` to store length of break time.
 	const [breakLength, setBreakLength] = useState(5);
+	// Create state `isNightMode` to track night mode state of app.
+	const [isNightMode, setIsNightMode] = useState(false);
 	// Create an audio element `audioAlarm`.
 	const audioAlarm = new Audio('/soundfx/alarm_sfx.mp3');
 	// Set the source and attributes of `audioAlarm`.
@@ -336,13 +336,26 @@ export default function App() {
 		}
 	}
 
+	function changeDisplayMode() {
+		let newDisplayMode = isNightMode;
+		setIsNightMode(!newDisplayMode);
+	}
+
 	return (
-		<div className="App flex h-screen">
-			<div id="App-frame" className="flex flex-col gap-[6px] w-fit mx-auto">
-				<div className="flex flex-row mx-auto pt-[18px]">
-					<p className="text-base select-none">Pomodoro Timer</p>
+		<div className={`${isNightMode ? 'night-mode' : 'day-mode'} App flex h-screen`}>
+			<div id="App-frame" className="flex flex-col gap-[6px] w-[230px] mx-auto">
+				<div id="header" className="flex items-center justify-center pt-[18px]">
+					<div className="flex-1 text-center">
+						<p className="text-base select-none">Pomodoro Timer</p>
+					</div>
+					<div>
+						<i 
+							className={`${isNightMode ? 'ri-sun-line' : 'ri-moon-line'} text-[18px]`}
+							onClick={changeDisplayMode}>
+						</i>
+					</div>
 				</div>
-				<hr id="header-hr" />
+				<hr id="header-hr" className={`${isNightMode ? 'night-mode' : 'day-mode'}`} />
 				<div className="flex flex-row mx-auto mt-7">
 					<Timer timeRemaining={timeRemaining} clockMode={clockMode} />
 				</div>
@@ -351,7 +364,7 @@ export default function App() {
 						<SessionLengthControl sessionLength={sessionLength} handleSessionChange={handleSessionChange} handleBlur={handleBlur} handleSessionClick={handleSessionClick} />
 						<p id="session-label" className="text-center select-none">Session Length</p>
 					</div>
-					<hr id="length-controls-hr" className="control-hr" />
+					<hr id="length-controls-hr" className={`${isNightMode ? 'night-mode' : 'day-mode'}`} />
 					<div className="flex flex-col mx-auto gap-1">
 						<BreakLengthControl breakLength={breakLength} handleBreakChange={handleBreakChange} handleBlur={handleBlur} handleBreakClick={handleBreakClick} />
 						<p id="break-label" className="text-center select-none">Break Length</p>

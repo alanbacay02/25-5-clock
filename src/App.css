@@ -1,49 +1,77 @@
 :root {
-  --black: #302B27;
-  --white: #F5F3F5;
+  --day-text: #302B27;
+  --day-bg: #F5F3F5;
+  --night-text: #F5F3F5;
+  --night-bg: #221D19;
 }
 
 .App {
   font-family: 'Inter', sans-serif;
-  color: var(--black);
-  background-color: var(--white);
+}
+
+.day-mode {
+  color: var(--day-text);
+  background-color: var(--day-bg);
+}
+
+.night-mode {
+  color: var(--night-text);
+  background-color: var(--night-bg);
 }
 
 #timer-display {
-  width: 230px;
-  height: 160px;
-  border-radius: 8px;
   background: var(--white);
   box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.25);
 }
 
-#header-hr {
+.night-mode #timer-display {
+  box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.625);
+}
+
+#header-hr.day-mode {
   margin: 0 auto;
   width: 50px;
-  height: 2px;
+  height: 1px;
+  border-color: #000000;
   background-color: #000000;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
-#length-controls-hr {
+#header-hr.night-mode {
+  margin: 0 auto;
+  width: 50px;
+  height: 1px;
+  border-color: #F3F5F4;
+  background-color: #F3F5F4;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+#length-controls-hr.day-mode {
   width: 190px;
-  height: 0;
   stroke-width: 1px;
   stroke: rgba(48, 43, 39, 0.21);
   filter: drop-shadow(0px 0px 0px rgba(0, 0, 0, 0.403));
 }
 
-.CircularProgressbar-background {
-  fill: var(--white) !important;
+#length-controls-hr.night-mode {
+  width: 190px;
+  stroke-width: 1px;
+  border-color: #121212;
+  stroke: rgb(0, 0, 0);
+  filter: drop-shadow(0px 0px 0px rgba(0, 0, 0, 0.842));
 }
 
-.CircularProgressbar-path {
-  stroke: var(--black) !important;
+
+.day-mode .CircularProgressbar-path {
+  stroke: var(--day-text) !important;
+}
+.night-mode .CircularProgressbar-path {
+  stroke: var(--night-text) !important;
 }
 
-/* .CircularProgressbar-trail {
-  stroke: gray;
-} */
+.night-mode .CircularProgressbar-trail {
+  stroke: gray !important;
+}
 
 /* .CircularProgressbar-text {
   fill: yellow;
