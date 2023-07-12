@@ -7,18 +7,22 @@ import 'react-circular-progressbar/dist/styles.css';
 
 
 function Timer({ timeRemaining, clockMode }) {
+
 	function formatTime(seconds) {
-		const minutes = Math.floor(seconds / 60);
+		// Calculates the number of minutes by dividing the input seconds by 60 and rounding down using Math.floor() function.
+		const minutes = Math.floor(seconds / 60); 
+		// Calculate the remaining seconds after converting them to a string and padding it with a leading zero if necessary.
 		const secondsFormatted = String(seconds % 60).padStart(2, '0');
+		// Return the formatted time string in the format "minutes : secondsFormatted".
 		return `${minutes} : ${secondsFormatted}`;
 	}
 
 	return (
 		<div id="timer-display" className="flex flex-col justify-center w-[230px] h-[160px] md:w-[350px] md:h-[200px] lg:w-[500px] lg:h-[300px] rounded-[8px]">
-			<p id="time-left" className="text-center h-[54px] text-[54px] md:text-[70px] md:h-[70px] lg:text-[110px] lg:h-[110px]">
+			<p id="time-left" className="text-center select-none h-[54px] text-[54px] md:text-[70px] md:h-[70px] lg:text-[110px] lg:h-[110px]">
 				{formatTime(timeRemaining)}
 			</p>
-			<p id="timer-label" className="mt-[14px] text-center text-base md:text-lg lg:text-3xl lg:mt-7">{clockMode === 'session' ? 'Session' : 'Break'}</p>
+			<p id="timer-label" className="mt-[14px] text-center text-base select-none md:text-lg lg:text-3xl lg:mt-7">{clockMode === 'session' ? 'Session' : 'Break'}</p>
 		</div>
 	);
 }
@@ -28,8 +32,10 @@ Timer.propTypes = {
 };
 
 function ControlPanelButtons({ clockIsRunning, startTimer, pauseTimer, resetTimer, muteAlarm, alarmIsMuted, timeRemaining, clockMode, sessionLength, breakLength }) {
+	// Checks `clockMode` is set to session and assigns `sessionLength` to `totalTime` when true, `breakLength` when false.
 	const totalTime =  convertToSeconds(clockMode === 'session' ? sessionLength : breakLength);
-	const progress = ((totalTime - timeRemaining) / totalTime) * 100;
+	// Calculates the progress of the timer in percentage by dividing the `timeRemaining` by the `totalTime` and multiplying it by '100'. 
+	const progress = (timeRemaining / totalTime) * 100;
 	return (
 		<div className="flex flex-row gap-6 mx-auto justify-center items-center">
 			<div id="mute" onClick={muteAlarm} className="flex items-center text-2xl lg:text-4xl">
@@ -38,6 +44,7 @@ function ControlPanelButtons({ clockIsRunning, startTimer, pauseTimer, resetTime
 			<div id="start_stop" className="h-20 w-20 lg:h-[120px] lg:w-[120px] flex">
 				<CircularProgressbarWithChildren
 					id="play-progress-circle"
+					// Assigns `progress` to value to be shown on CircularProgressBar
 					value={progress}
 					strokeWidth="3"
 				>
@@ -148,19 +155,21 @@ export default function App() {
 			clearInterval(timerId);
 			// Perform any necessary actions when the countdown ends.
 			if (!alarmIsMuted) {
-				audioAlarm.play();
+				audioAlarm.play(); // When `alarmIsMuted` is true, `audioAlarm` wont be played.
 			}
+			// Checks if `clockMode` is set to session.
 			if (clockMode === 'session') {
-				setClockMode('break');
-				let convertedBreakLength = convertToSeconds(breakLength);
-				setTimeRemaining(convertedBreakLength);
-				startTimer();
+				setClockMode('break'); // Sets `clockMode` to break.
+				let convertedBreakLength = convertToSeconds(breakLength); // Converts `breakLength` to seconds and assigns it to `convertedBreakLength`.
+				setTimeRemaining(convertedBreakLength); // Sets state `timeRemaining` to `convertedBreakLength`.
+				startTimer(); // Starts the timer.
 			}
+			// Checks if `clockMode` is set to break.
 			if (clockMode === 'break') {
-				setClockMode('session');
-				let convertedSessionLength = convertToSeconds(sessionLength);
-				setTimeRemaining(convertedSessionLength);
-				startTimer();
+				setClockMode('session'); // Sets `clockMode` to session.
+				let convertedSessionLength = convertToSeconds(sessionLength); // Converts `sessionLength` to seconds and assigns it to `convertedSessionLength`.
+				setTimeRemaining(convertedSessionLength); // Sets state `timeRemaining` to `convertedSessionLength`.
+				startTimer(); // Starts the timer.
 			}
 		}
 	}, [timeRemaining, timerId]);
@@ -203,36 +212,44 @@ export default function App() {
 		setClockIsRunning(false); // Sets states to false to prepare for new countdown.
 		setClockIsPaused(false); // Sets states to false to prepare for new countdown.
 		setClockMode('session'); // Sets clock back to session mode.
-		setSessionLength(25);
-		setBreakLength(5);
-		let convertedLength = convertToSeconds(25);
-		setTimeRemaining(convertedLength); // Resets `timeRemaining` to initial `sessionLength`.
+		setSessionLength(25); // Sets `sessionlength` back to default value of 25mins.
+		setBreakLength(5); // Sets `breaklength` back to default value of 5mins.
+		let convertedDefaultLength = convertToSeconds(25); // Converts default `sessionLength` value to seconds and assigns it to `convertedDefaultLength`
+		setTimeRemaining(convertedDefaultLength); // Resets `timeRemaining` to default `sessionLength`.
 	}
 
+	// Handles audio state of the app.
 	function muteAlarm() {
-		setAlarmIsMuted(!alarmIsMuted);
+		setAlarmIsMuted(!alarmIsMuted); // Inverts value of `alarmIsMuted` when called and assigns it to `alarmIsMuted` state.
+	}
+
+	// Handles changing display mode between night or day.
+	function changeDisplayMode() {
+		setIsNightMode(!isNightMode);
 	}
 
 	// -------------- handles changes and click for `SessionLengthControl` Component --------------------------
 	function handleSessionChange(event) {
 		if (clockIsRunning) {
-			return;
+			return; // When clock is running, do nothing.
 		}
 		let value = event.target.value;
 		// Allow only digits (0-9).
 		if (!/^\d*$/.test(value)) {
 			return;
 		}
-		setSessionLength(value === '' ? '' : parseInt(value));
-		if (clockMode === 'session') {
-			let convertedSessionLength = convertToSeconds(value === '' ? 1 : parseInt(value));
-			setTimeRemaining(convertedSessionLength);
+		setSessionLength(value === '' ? '' : parseInt(value)); // Checks if value is an empty string. When true, state `sessionLength` is assigned an empty string. When false, state `sessionlength` is assigned `value` that is parsed into an integer.
+
+		if (clockMode === 'session') { // Checks if `clockMode` is set to session.
+			// Checks first if value is an empty string. If true, a value of '1' is returned that is then converted to seconds and assigned to `convertedSessionLength`. When false, `value` is converted to seconds and asigned to `convertedSessionLength`.
+			let convertedSessionLength = convertToSeconds(value === '' ? 1 : parseInt(value)); 
+			setTimeRemaining(convertedSessionLength); // State `timeRemaining` is set to `convertedSessionLength`.
 		}
 	}
 
 	function handleSessionClick(change) {
 		if (clockIsRunning) {
-			return;
+			return; // When clock is running, do nothing.
 		}
 		let updatedSessionLength = sessionLength; // gets current session length and assigns it to `updatedSessionLength`;
 		if (updatedSessionLength >= 60 && change === 'increment') {
@@ -261,23 +278,25 @@ export default function App() {
 	// -------------- handles changes and click for `BreakLengthControl` Component --------------------------
 	function handleBreakChange(event) {
 		if (clockIsRunning) {
-			return;
+			return; // When clock is running, do nothing.
 		}
 		let value = event.target.value;
 		// Allow only digits (0-9)
 		if (!/^\d*$/.test(value)) {
 			return;
 		}
-		setBreakLength(value === '' ? '' : parseInt(value));
-		if (clockMode === 'break') {
+		setBreakLength(value === '' ? '' : parseInt(value)); // Checks if value is an empty string. When true, state `breakLength` is assigned an empty string. When false, state `breaklength` is assigned `value` that is parsed into an integer.
+
+		if (clockMode === 'break') {// Checks if `clockMode` is set to break.
+			// Checks first if value is an empty string. If true, a value of '1' is returned that is then converted to seconds and assigned to `convertedBreakLength`. When false, `value` is converted to seconds and asigned to `convertedBreakLength`.
 			let convertedBreakLength = convertToSeconds(value === '' ? 1 : parseInt(value));
-			setTimeRemaining(convertedBreakLength);
+			setTimeRemaining(convertedBreakLength); // State `timeRemaining` is set to `convertedBreakLength`.
 		}
 	}
 
 	function handleBreakClick(change) {
 		if (clockIsRunning) {
-			return;
+			return; // When clock is running, do nothing.
 		}
 		let updatedBreakLength = breakLength; // gets current break length and assigns it to `updatedBreakLength`.
 		if (updatedBreakLength >= 60 && change === 'increment') {
@@ -306,37 +325,38 @@ export default function App() {
 	// Handles blur change for both `SessionLengthControl` and `BreakLengthControl` components
 	function handleBlur(component) {
 		if (clockIsRunning) {
-			return;
+			return; // When clock is running, do nothing.
 		}
 		switch (true) {
+			// Checks if `component` has a value of `session`.
 			case component === 'session': {
+				// Checks if `sessionLength` is an empty string or has a value less than '0'.
 				if (sessionLength === '' || sessionLength <= 0) {
-					setSessionLength(1);
-					setTimeRemaining(1 * 60);
+					setSessionLength(1); // Sets state `sessionLength` to '1'.
+					setTimeRemaining(60); // Sets state `timeRemaining` to '60' (1 minute = 60 seconds).
 				}
+				// Checks if `sessionLength` is equal to or greater than 60.
 				if (sessionLength >= 60) {
-					setSessionLength(60);
-					setTimeRemaining(60 * 60);
+					setSessionLength(60); // Sets state `sessionLength` to '1' (1 minute = 60 seconds).
+					setTimeRemaining(3600); // Sets state `timeRemaining` to '3600' (60 minutes = 3600 seconds).
 				}
 				break;
 			}
+			// Checks if `component` has a value of `break`.
 			case component === 'break': {
+				// Checks if `breakLength` is an empty string or has a value less than '0'.
 				if (breakLength === '' || breakLength <= 0) {
-					setBreakLength(1);
-					setTimeRemaining(1 * 60);
+					setBreakLength(1); // Sets state `breakLength` to '1'.
+					setTimeRemaining(1 * 60); // Sets state `timeRemaining` to '60'.
 				}
+				// Checks if `breakLength` is equal to or greater than 60.
 				if (breakLength >= 60) {
-					setBreakLength(60);
-					setTimeRemaining(60 * 60);
+					setBreakLength(60); // Sets state `breakLength` to '1' (1 minute = 60 seconds).
+					setTimeRemaining(60 * 60); // Sets state `timeRemaining` to '3600' (60 minutes = 3600 seconds).
 				}
 				break;
 			}
 		}
-	}
-
-	function changeDisplayMode() {
-		let newDisplayMode = isNightMode;
-		setIsNightMode(!newDisplayMode);
 	}
 
 	return (
